@@ -7,6 +7,19 @@
 [![GitHub Release](https://img.shields.io/github/release/golang-migrate/migrate.svg)](https://github.com/golang-migrate/migrate/releases)
 [![Go Report Card](https://goreportcard.com/badge/github.com/golang-migrate/migrate/v4)](https://goreportcard.com/report/github.com/golang-migrate/migrate/v4)
 
+# [Backend #16] How to handle DB errors in GOlang correctly
+
+- Use sqlc to generate go code for users table
+- other tests failed since users table introduce a new foreign key constraint, need to fix that in `account_test.go`
+- api tests fail, `*mockdb.MockStore does not implement db.Store`: since we create two new go functions for users table, `Querier` interface requires the mockdb to implement those two new functions. Need to run `make mock` to regenerate the code for the `MockStore`
+- then the HTTP api requests also fail because of the new introduced foreign key constraint,
+
+# [Backend #15] Add users table with unique & foreign key constraints in PostgreSQL
+
+- Add users table to dbdiagram
+- instead of overwriting migration up sql, we should create another migration version: `migrate create -ext sql -dir db/migration -seq add_users`
+- add migrateup1 and migratedown1 to Makefile
+
 # [Backend #14] Implement transfer money API with a custom params validator
 
 - add `api/transfer.go`
